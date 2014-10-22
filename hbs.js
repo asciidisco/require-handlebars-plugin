@@ -11,7 +11,7 @@
 define: false, process: false, window: false */
 define([
 //>>excludeStart('excludeHbs', pragmas.excludeHbs)
-  'handlebars', 'hbs/underscore', 'hbs/i18nprecompile', 'hbs/json2'
+  'hbs/handlebars', 'hbs/underscore', 'hbs/i18nprecompile', 'hbs/json2'
 //>>excludeEnd('excludeHbs')
 ], function (
 //>>excludeStart('excludeHbs', pragmas.excludeHbs)
@@ -484,9 +484,15 @@ define([
               deps[i] = "hbs!"+path;
             }
           }
+          
+          if (metaObj && metaObj.po) {
+              metaObj.po.forEach(function (poFile) {
+                deps.push('po!' + poFile);
+              });
+          }
 
           depStr = deps.join("', '");
-
+          
           helps = helps.concat((metaObj && metaObj.helpers) ? metaObj.helpers : []);
           helpDepStr = disableHelpers ?
             '' : (function (){
@@ -575,7 +581,6 @@ define([
           var partialReferences = [];
           if(require.config.hbs._partials[name])
             partialReferences = require.config.hbs._partials[name].references;
-
           text = '/* START_TEMPLATE */\n' +
                  'define('+tmplName+"['hbs','hbs/handlebars'"+depStr+helpDepStr+'], function( hbs, Handlebars ){ \n' +
                    'var t = Handlebars.template(' + prec + ');\n' +
