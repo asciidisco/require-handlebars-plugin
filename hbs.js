@@ -507,6 +507,7 @@ define([
               for ( i = 0; i < helps.length; i++ ) {
                 paths[i] = "'" + pathGetter(helps[i], path) + "'"
               }
+
               return paths;
             })().join(',');
 
@@ -580,10 +581,29 @@ define([
 
           var partialReferences = [];
           if(require.config.hbs._partials[name])
-            partialReferences = require.config.hbs._partials[name].references;
+            partialReferences = require.config.hbs._partials[name].references;  
+            
+          // additions for .po files
+          var additionalRequires = [];
+          var additionalRequiresNames = [];
+          if (depStr.search('po!') !== -1) {
+            deps.forEach(function (dependency) {
+             if (dependency.search('po!') !== -1) {
+               additionalRequiresNames.push(dependency.replace('po!', ''));
+               additionalRequires.push(dependency.replace('po!', '').replace('-', '_'));
+             } 
+            });
+          }
+                          
           text = '/* START_TEMPLATE */\n' +
-                 'define('+tmplName+"['hbs','hbs/handlebars'"+depStr+helpDepStr+'], function( hbs, Handlebars ){ \n' +
-                   'var t = Handlebars.template(' + prec + ');\n' +
+                 'define('+tmplName+"['hbs','hbs/handlebars'"+depStr+helpDepStr+'], function( hbs, Handlebars ' + ( additionalRequires.length ? ',' + additionalRequires.join(',') : '') + '){ \n';
+             
+             additionalRequiresNames.forEach(function (poname, index) {        
+             text +=  'if (!window.require.i18n) {window.require.i18n = {};}\n' +
+                   'if (!window.require.i18n["' + poname + '"]) {window.require.i18n["' + poname + '"] = ' + additionalRequires[index] + ';}\n';
+             });
+                   
+             text +=      'var t = Handlebars.template(' + prec + ');\n' +
                    "Handlebars.registerPartial('" + name + "', t);\n";
 
           for(var i=0; i<partialReferences.length;i++)
