@@ -484,7 +484,7 @@ define([
               deps[i] = "hbs!"+path;
             }
           }
-          
+
           if (metaObj && metaObj.po) {
               metaObj.po.forEach(function (poFile) {
                 deps.push('po!' + poFile);
@@ -492,7 +492,7 @@ define([
           }
 
           depStr = deps.join("', '");
-          
+
           helps = helps.concat((metaObj && metaObj.helpers) ? metaObj.helpers : []);
           helpDepStr = disableHelpers ?
             '' : (function (){
@@ -505,7 +505,7 @@ define([
                 };
 
               for ( i = 0; i < helps.length; i++ ) {
-                paths[i] = "'" + pathGetter(helps[i], path) + "'"
+                paths[i] = "'" + pathGetter(helps[i], path, require.s.contexts._.config) + "'"
               }
 
               return paths;
@@ -581,8 +581,8 @@ define([
 
           var partialReferences = [];
           if(require.config.hbs._partials[name])
-            partialReferences = require.config.hbs._partials[name].references;  
-            
+            partialReferences = require.config.hbs._partials[name].references;
+
           // additions for .po files
           var additionalRequires = [];
           var additionalRequiresNames = [];
@@ -591,18 +591,18 @@ define([
              if (dependency.search('po!') !== -1) {
                additionalRequiresNames.push(dependency.replace('po!', ''));
                additionalRequires.push(dependency.replace('po!', '').replace('-', '_'));
-             } 
+             }
             });
           }
-                          
+
           text = '/* START_TEMPLATE */\n' +
                  'define('+tmplName+"['hbs','hbs/handlebars'"+depStr+helpDepStr+'], function( hbs, Handlebars ' + ( additionalRequires.length ? ',' + additionalRequires.join(',') : '') + '){ \n';
-             
-             additionalRequiresNames.forEach(function (poname, index) {        
+
+             additionalRequiresNames.forEach(function (poname, index) {
              text +=  'if (!window.require.i18n) {window.require.i18n = {};}\n' +
                    'if (!window.require.i18n["' + poname + '"]) {window.require.i18n["' + poname + '"] = ' + additionalRequires[index] + ';}\n';
              });
-                   
+
              text +=      'var t = Handlebars.template(' + prec + ');\n' +
                    "Handlebars.registerPartial('" + name + "', t);\n";
 
