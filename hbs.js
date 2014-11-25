@@ -491,6 +491,10 @@ define([
                 var __temp = path.split('/');
                 __temp.pop();
                 var virtualPath = __temp.join('/') + '/';
+                if (virtualPath.search('../../') !== -1) {
+                    virtualPath = virtualPath.replace('../../', '../../../');
+                }
+
                 poFile = poFile.replace(':locale', '{{locale}}');
                 poFile = poFile.replace('./', virtualPath);
 
