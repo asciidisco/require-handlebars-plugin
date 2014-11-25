@@ -11,13 +11,14 @@
 define: false, process: false, window: false */
 define([
 //>>excludeStart('excludeHbs', pragmas.excludeHbs)
-  'hbs/handlebars', 'hbs/underscore', 'hbs/i18nprecompile', 'hbs/json2'
+  'hbs/handlebars', 'hbs/underscore', 'hbs/i18nprecompile'
 //>>excludeEnd('excludeHbs')
 ], function (
 //>>excludeStart('excludeHbs', pragmas.excludeHbs)
-  Handlebars, _, precompile, JSON
+  Handlebars, _, precompile
 //>>excludeEnd('excludeHbs')
 ) {
+
   //>>excludeStart('excludeHbs', pragmas.excludeHbs)
   var fs;
   var getXhr;
@@ -487,6 +488,12 @@ define([
 
           if (metaObj && metaObj.po) {
               metaObj.po.forEach(function (poFile) {
+                var __temp = path.split('/');
+                __temp.pop();
+                var virtualPath = __temp.join('/') + '/';
+                poFile = poFile.replace(':locale', '{{locale}}');
+                poFile = poFile.replace('./', virtualPath);
+
                 deps.push('po!' + poFile);
               });
           }
@@ -589,15 +596,14 @@ define([
           if (depStr.search('po!') !== -1) {
             deps.forEach(function (dependency) {
              if (dependency.search('po!') !== -1) {
-               additionalRequiresNames.push(dependency.replace('po!', ''));
-               additionalRequires.push(dependency.replace('po!', '').replace('-', '_'));
+               additionalRequiresNames.push(dependency.replace('po!', '').replace('./', '').replace(/\//g, '__').replace('{{locale}}', '__loc'));
+               additionalRequires.push(dependency.replace('po!', '').replace('./', '').replace(/\./g, '_').replace(/\//g, '__').replace('{{locale}}', '__loc'));
              }
             });
           }
 
           text = '/* START_TEMPLATE */\n' +
                  'define('+tmplName+"['hbs','hbs/handlebars'"+depStr+helpDepStr+'], function( hbs, Handlebars ' + ( additionalRequires.length ? ',' + additionalRequires.join(',') : '') + '){ \n';
-
              additionalRequiresNames.forEach(function (poname, index) {
              text +=  'if (!window.require.i18n) {window.require.i18n = {};}\n' +
                    'if (!window.require.i18n["' + poname + '"]) {window.require.i18n["' + poname + '"] = ' + additionalRequires[index] + ';}\n';
