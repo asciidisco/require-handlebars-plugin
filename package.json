@@ -12,7 +12,7 @@
   "volo": {
     "type": "directory",
     "dependencies": {
-      "Handlebars": "https://raw.github.com/SlexAxton/require-handlebars-plugin/master/Handlebars.js"
+      "Handlebars": "https://raw.github.com/SlexAxton/require-handlebars-po-plugin/master/Handlebars.js"
     }
   },
   "jam": {
