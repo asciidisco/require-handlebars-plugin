@@ -1,5 +1,5 @@
 {
-  "name": "require-handlebars-plugin",
+  "name": "require-handlebars-po-plugin",
   "version": "0.10.0",
   "author": "Alex Sexton <alexsexton@gmail.com>",
   "description": "A plugin for handlebars in require.js",

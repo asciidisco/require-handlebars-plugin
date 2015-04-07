@@ -1,12 +1,6 @@
-# Require.js Handlebars Plugin
+# Require.js Handlebars Plugin (with Gettext template helper)
 
-[![devDependency Status](https://david-dm.org/SlexAxton/require-handlebars-plugin/dev-status.svg)](https://david-dm.org/SlexAxton/require-handlebars-plugin#info=devDependencies)
-
-## Requirements
-
-Should work in both the java and node build environments.
-
-Require.js >= 2.1.x (The last tag to work for Require < 2.1 is the `0.3.3` tag)
+> This is a modification of Alex Sextons original hbs plugin for require.js
 
 ## Usage
 
