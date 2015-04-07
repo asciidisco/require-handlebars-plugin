@@ -1,0 +1,21 @@
+{
+  "name": "require-handlebars-po-plugin",
+  "version": "0.10.0",
+  "homepage": "https://github.com/asciidisco/require-handlebars-plugin",
+  "authors": [
+    "Sebastian Golasch <public@asciidisco.com>"
+  ],
+  "main": "hbs.js",
+  "keywords": [
+    "handlebars",
+    "gettext"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
