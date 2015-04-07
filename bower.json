@@ -1,6 +1,6 @@
 {
   "name": "require-handlebars-po-plugin",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "homepage": "https://github.com/asciidisco/require-handlebars-plugin",
   "authors": [
     "Sebastian Golasch <public@asciidisco.com>"
