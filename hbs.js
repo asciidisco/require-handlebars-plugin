@@ -498,7 +498,7 @@ define([
                 poFile = poFile.replace(':locale', '{{locale}}');
                 poFile = poFile.replace('./', virtualPath);
 
-                if (if (typeof window === 'undefined' && poFile.search('/../') !== -1) {
+                if (typeof window === 'undefined' && poFile.search('/../') !== -1) {
                     var __split = poFile.split('/');
                     var __correction = [];
                     __split.forEach(function (item, idx) {
