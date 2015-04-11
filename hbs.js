@@ -93,7 +93,7 @@ define([
     fetchText = function (url, callback) {
       var xdm = false;
       // If url is a fully qualified URL, it might be a cross domain request. Check for that.
-	  // IF url is a relative url, it cannot be cross domain.
+    // IF url is a relative url, it cannot be cross domain.
       if (url.indexOf('http') != 0 ){
           xdm = false;
       }else{
@@ -498,6 +498,18 @@ define([
                 poFile = poFile.replace(':locale', '{{locale}}');
                 poFile = poFile.replace('./', virtualPath);
 
+                if (poFile.search('/../') !== -1) {
+                    var __split = poFile.split('/');
+                    var __correction = [];
+                    __split.forEach(function (item, idx) {
+                        var next = __split[idx+1] || '';
+                        if (next !== '..' && item !== '..') {
+                           __correction.push(item);
+                        }
+                    });
+                    poFile = __correction.join('/');
+                }
+
                 deps.push('po!' + poFile);
               });
           }
@@ -605,7 +617,6 @@ define([
              }
             });
           }
-
           text = '/* START_TEMPLATE */\n' +
                  'define('+tmplName+"['hbs','hbs/handlebars'"+depStr+helpDepStr+'], function( hbs, Handlebars ' + ( additionalRequires.length ? ',' + additionalRequires.join(',') : '') + '){ \n';
              additionalRequiresNames.forEach(function (poname, index) {
